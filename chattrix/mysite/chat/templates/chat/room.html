@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Chat Room</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            padding: 15px;
+        }
+
+        #chat-log {
+            height: 75vh;
+            overflow-y: scroll;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            margin: 10px 20px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .message {
+            max-width: 60%;
+            padding: 10px 15px;
+            border-radius: 20px;
+            margin: 5px 0;
+            display: inline-block;
+            clear: both;
+        }
+
+        .message.sent {
+            background-color: #dcf8c6;
+            align-self: flex-end;
+            text-align: right;
+        }
+
+        .message.received {
+            background-color: #ffffff;
+            align-self: flex-start;
+            text-align: left;
+        }
+
+        #chat-form {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 20px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        #chat-message-input {
+            width: 75%;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        #chat-message-submit {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #chat-message-submit:hover {
+            background-color: #45a049;
+        }
+
+        #emoji-picker {
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Room: <span id="room-name">{{ room_name }}</span></h2>
+    <div id="chat-log"></div>
+
+    <div id="chat-form">
+        <input id="chat-message-input" type="text" placeholder="Type your message here...">
+        <span id="emoji-picker">😃</span>
+        <input id="chat-message-submit" type="button" value="Send">
+    </div>
+
+    <script>
+        const roomName = "{{ room_name }}";
+        const username = prompt("Enter your name:");
+        const chatSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const message = data.message;
+            const sender = data.username;
+            const msgClass = sender === username ? 'sent' : 'received';
+
+            const msgElement = document.createElement('div');
+            msgElement.classList.add('message', msgClass);
+            msgElement.textContent = sender + ": " + message;
+            document.querySelector('#chat-log').appendChild(msgElement);
+
+            const chatLog = document.querySelector('#chat-log');
+            chatLog.scrollTop = chatLog.scrollHeight;
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            if (message.trim() !== "") {
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'username': username
+                }));
+                messageInputDom.value = '';
+            }
+        };
+
+        // Basic emoji picker popup
+        const emojiPicker = document.querySelector('#emoji-picker');
+        emojiPicker.onclick = () => {
+            const emoji = prompt("Enter emoji or paste it here:");
+            if (emoji) {
+                document.querySelector('#chat-message-input').value += emoji;
+                document.querySelector('#chat-message-input').focus();
+            }
+        };
+    </script>
+</body>
+</html>

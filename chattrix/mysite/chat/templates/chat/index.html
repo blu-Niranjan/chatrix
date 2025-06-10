@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Rooms</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+        .form-container {
+            background-color: rgba(0,0,0,0.2);
+            padding: 30px;
+            border-radius: 10px;
+        }
+        input[type=text] {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px;
+            background: #fff;
+            border: none;
+            border-radius: 5px;
+            color: #0072ff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+  <h2>Join Chat Room</h2>
+  <form id="chat-form" action="/chat/room/" method="get">
+    <label>Room name: <input type="text" name="room_name" required></label><br>
+    <label>Username: <input type="text" name="username" required></label><br>
+    <button type="submit">Enter</button>
+  </form>
+</body>
+</html>
