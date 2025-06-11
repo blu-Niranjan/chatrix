@@ -1,9 +1,11 @@
 services:
   - type: web
     name: chatrix
-    env: python
-    rootDir: mysite  # 👈 This is critical!
-    buildCommand: pip install -r ../requirements.txt
+    runtime: python
+    buildCommand: pip install -r requirements.txt
     startCommand: gunicorn mysite.wsgi:application
-    workingDir: mysite
-    autoDeploy: true
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: mysite.settings
+      - key: PYTHON_VERSION
+        value: 3.11
