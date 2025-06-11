@@ -8,7 +8,6 @@ def index(request):
 def room(request):
     room_name = request.GET.get('room_name', None)
     if not room_name:
-        # handle missing room_name - maybe redirect or error
         return redirect('index')
 
     username = request.GET.get('username', 'Anonymous')
