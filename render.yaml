@@ -2,7 +2,8 @@ services:
   - type: web
     name: chatrix
     env: python
-    buildCommand: pip install -r requirements.txt
+    rootDir: mysite  # 👈 This is critical!
+    buildCommand: pip install -r ../requirements.txt
     startCommand: gunicorn mysite.wsgi:application
     workingDir: mysite
     autoDeploy: true
