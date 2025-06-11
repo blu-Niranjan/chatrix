@@ -1,12 +1,10 @@
 services:
   - type: web
-    name: chatrix
-    runtime: python
+    name: chattrix-app
+    env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn mysite.mysite.wsgi:application --chdir mysite
-
+    startCommand: gunicorn mysite.wsgi:application
+    workingDir: chattrix/mysite
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: mysite.settings
-      - key: PYTHON_VERSION
-        value: 3.11
