@@ -107,8 +107,10 @@
         const roomName = "{{ room_name }}";
         const username = prompt("Enter your name:");
         const chatSocket = new WebSocket(
-            'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+            'wss://' + window.location.host +
+            '/ws/chat/' + roomName + '/'
         );
+
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
