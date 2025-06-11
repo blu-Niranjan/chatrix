@@ -129,7 +129,7 @@ CHANNEL_LAYERS = {
         'BACKEND': 'channels.layers.InMemoryChannelLayer'
     }
 }
+ALLOWED_HOSTS = ['chatrix.onrender.com']
 import os
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'insecure-key-for-dev')
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
