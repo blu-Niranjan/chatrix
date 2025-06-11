@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-$+4_%r1mn@2)$7hc+r_8aup@+4f_)22e%x5bd(elvfxqt_2&*_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['chatrix.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
