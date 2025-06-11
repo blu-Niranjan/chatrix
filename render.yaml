@@ -3,8 +3,8 @@ services:
     name: chattrix-app
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn mysite.wsgi:application
-    workingDir: chattrix/mysite
+    startCommand: gunicorn mysite.mysite.wsgi:application
+    workingDir: chattrix  # Not chattrix/mysite!
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: mysite.settings
+        value: mysite.mysite.settings
